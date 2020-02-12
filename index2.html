@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+
+  </head>
+  <body>
+      <div id="root"></div>
+      <script type="text/babel">
+        function ShoppingHeader(props){
+          return (<div>
+                    <h1>{props.header1}</h1>
+                    <h2> Total number of Items:{props.totalItems}</h2>
+                   </div>
+                    )
+        }
+
+        function CategoryItem(props)
+        {
+          return(
+              
+                <ol>
+                    <li >{props.items[0]}</li>
+                    <li >{props.items[1]}</li>
+                    <li >{props.items[2]}</li>                    
+                </ol>
+              
+          )
+        }
+
+        function ShoppingCategory(props){
+          return(
+              <div>
+                <h3>{props.Category}</h3>
+                <ol>
+                  <CategoryItem items={props.items}/>
+                </ol>
+                
+              </div>
+          )
+        }
+
+        function ShoppingApp(){
+          return(<div>
+                    <ShoppingHeader header1="My Shopping List" totalItems="9"/>
+                    <ShoppingCategory Category="Food" items={[ "Apple","Bread","Cheese"]} />
+                    <ShoppingCategory Category="Clothes" items={[ "Shirt","Pants","Hat"]} />
+                    <ShoppingCategory Category="Food" items={[ "Pen","Paper","Glue"]} />
+                  </div>
+          )
+        }
+
+        ReactDOM.render(
+          <ShoppingApp/>
+          ,
+          document.getElementById("root")
+        )
+
+      </script>
+  
+  </body>
+</html>

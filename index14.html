@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+
+  </head>
+  <body>
+      <div id="root"></div>
+      <script type="text/babel">
+/* restriction:{"DietaryRestrictions":false,
+                                        "PhysicalDisabilities":false,
+                                         "MedicalNeeds":false }*/
+
+        function RegisterationRecord(props){
+            var style = {
+                display:"flex"
+            }
+
+            return(
+                <div style={style}>
+                    <div><button onClick={props.handleClick}>X</button></div>
+                    <div>{props.firstName}</div>
+                    <div>{props.lastName}</div>
+                    <div>{props.activity}</div>
+                    <div>{props.restriction}</div>
+                </div>
+            )
+        }
+
+        function RegisterationList(props){
+            console.log("inside Registeration")
+            console.log(props.registerationCollection)
+
+            var tempReg= props.registerationCollection.map((item,index)=>
+                    <RegisterationRecord key={index} handleClick={()=>props.handleClick(index)} firstName={item.firstName} 
+                    lastName={item.lastName} activity={item.activity} 
+                    restriction={`${(item.restrictionsA) ? "a" : ""} ${(item.restrictionsB) ? "b" : ""} ${(item.restrictionsC) ? "c" : ""}`}/>             
+                )
+            
+            return(<div>
+                    {tempReg}
+                </div>)
+        }
+
+        class App extends React.Component{
+            constructor(props){
+                super(props);
+                this.state={firstName:"",lastName:"",activity:"",valueDietary:"",valuePhysical:"", valueMedical:"",registerationCollection:[]}
+                this.handleChange=this.handleChange.bind(this);
+                this.handleCheckBoxChange=this.handleCheckBoxChange.bind(this);
+                this.handleSubmit=this.handleSubmit.bind(this);
+            }
+            
+            handleChange(event){
+                this.setState({[event.target.name]:event.target.value});
+            }
+            handleCheckBoxChange(event){
+                this.setState({[event.target.name]:event.target.checked})
+            }
+
+            handleSubmit(){
+                console.log("submit clicked")
+                var tempRegisterationCollection=this.state.registerationCollection.slice();
+                console.log(tempRegisterationCollection);
+                tempRegisterationCollection.push({"firstName":this.state.firstName,"lastName":this.state.lastName,
+                                                "activity":this.state.activity,"restrictionsA":this.state.valueDietary,
+                                                "restrictionsB":this.state.valuePhysical,"restrictionsC":this.state.valueMedical})
+                this.setState({registerationCollection:tempRegisterationCollection})
+            }
+            handleClick(index){
+                
+                var tempRegisterationCollection=this.state.registerationCollection.slice();
+                tempRegisterationCollection.splice(index,1);
+                console.log(tempRegisterationCollection);
+                this.setState({registerationCollection:tempRegisterationCollection})
+               
+            }
+
+            render(){
+                var activityOptionsValues=["Science Lab","Swimming","Cooking","Painting"];
+                var activityOptions=activityOptionsValues.map((item)=> 
+                                                                <option value={item}>{item}</option>
+                                                            )
+                
+                var style = {
+                    display:"flex"
+                };
+                return(
+                    <div>
+                        <div>
+                            First Name <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange}/>    
+                        </div>
+                        <div>
+                            Last Name <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleChange}/>    
+                        </div>
+                        <div>
+                            Select Activity <select name="activity" value={this.state.activity} onChange={this.handleChange}>
+                                                {activityOptions}
+                                            </select>
+                        </div>
+                        <div>
+                           Check All that apply:  
+                           <input type="checkbox" name="valueDietary" value={this.state.valueDietary} onChange={this.handleCheckBoxChange}/>Dietary Restrictions
+                           <input type="checkbox" name="valuePhysical" value={this.state.valuePhysical} onChange={this.handleCheckBoxChange}/>Physical Restrictions
+                           <input type="checkbox" name="valueMedical" value={this.state.valueMedical} onChange={this.handleCheckBoxChange}/>Medical Needs
+                        </div>
+                        <div>
+                            <button onClick={this.handleSubmit}>Submit</button>    
+                        </div>
+                        <div style={style}>
+                            <div>Remove</div>
+                            <div>First Name</div>
+                            <div>Last Name</div>
+                            <div>Acivity</div>
+                            <div>Restriction</div>
+                        </div>
+                        <RegisterationList registerationCollection={this.state.registerationCollection} handleClick={this.handleClick.bind(this)}/>
+                    </div>
+                )
+            }
+        }
+
+          ReactDOM.render(
+              <div>
+                  <App/>
+              </div>,
+              document.getElementById("root")
+          )
+      </script>
+  
+  </body>
+</html>

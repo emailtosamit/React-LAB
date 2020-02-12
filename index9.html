@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+
+  </head>
+  <body>
+      <div id="root"></div>
+      <script type="text/babel">
+          function AnswerButton(props){
+              
+              return(
+                    <button onClick={() => props.handleClick(props.isCorrect)}>{props.option}</button>
+              )
+          }
+          
+          function Options(props){
+            
+            var answerbutton=[];
+            props.choices.forEach(element => {
+                if(element==props.correctChoice){
+                  answerbutton.push(<AnswerButton option={element} isCorrect={true} handleClick={props.handleClick}></AnswerButton>)
+                }
+                else{
+                    answerbutton.push(<AnswerButton option={element} isCorrect={false} handleClick={props.handleClick}></AnswerButton>)
+                }
+              });
+            
+            return(
+                <div>{answerbutton}</div>
+
+            )
+          }
+        
+          function Question(props){
+              return(
+                  
+                    <div>{props.questiontext}</div> 
+                  
+              )
+          }
+
+          function GetQuestionSet(index){
+            
+            var question=[{Q:'what is 2 X 2', Choices:['1', '2','3','4'],correct:'4'},
+                          {Q:'what is 3 X 3', Choices:['9','6','3','12'],correct:'9'},
+                          {Q:'what is 4 X 5', Choices:['15','20','3','12'],correct:'20'},
+                          {Q:'what is 3 X 5', Choices:['15','6','3','12'],correct:'15'},
+                          {Q:'what is 6 X 7', Choices:['9','36','3','42'],correct:'42'},
+                          {Q:'what is 8 X 9', Choices:['89','72','73','12'],correct:'72'}];
+
+            return question[index];
+        }
+
+          class MainApp extends React.Component{
+           
+              constructor(props){
+                  super(props);
+                  var question=GetQuestionSet(0);
+                  this.state={currentQuestion:question.Q,choices:question.Choices, correctChoice:question.correct, correct:0,incorrect:0,index:0,isLast:false} 
+                    
+                    this.handleClick=this.handleClick.bind(this);
+                    this.handleRestart=this.handleRestart.bind(this);
+              }
+              
+              handleRestart(){
+                  console.log("restarting")
+                    
+                  var question=GetQuestionSet(0);
+                  this.setState({currentQuestion:question.Q,choices:question.Choices, correctChoice:question.correct, correct:0,incorrect:0,index:0,isLast:false}); 
+              }
+
+             
+
+            handleClick(isCorrect){
+                var question=GetQuestionSet(this.state.index+1);
+                if(question==null)
+                    console.log("it is null"); 
+                else
+                    console.log("it is not null");
+
+                if(isCorrect==true){ 
+                    if(question==null){
+                        this.setState({correct:this.state.correct+1,isLast:true})
+                    }   
+                    else
+                    {                
+                        this.setState({currentQuestion:question.Q,choices:question.Choices, correctChoice:question.correct, correct:this.state.correct+1,index:this.state.index+1})
+                    }
+                }
+                else 
+                {
+                    if(question==null){
+                        this.setState({correct:this.state.incorrect+1,isLast:true})
+                    }  
+                    else
+                    {
+                        this.setState({currentQuestion:question.Q,choices:question.Choices, correctChoice:question.correct, incorrect:this.state.incorrect+1,index:this.state.index+1})
+                    }
+                }
+              }
+            render(){
+                  if(this.state.isLast==true)
+                  {
+                    return(                      
+                            <div>
+                                Quiz completes  
+                                <button onClick={this.handleRestart}>Restart</button>                                   
+                            </div>
+
+                        )
+                  }
+                  else{
+                    return(                      
+                            <div>
+                                <Question questiontext={this.state.currentQuestion}/> 
+                                <Options choices={this.state.choices} correctChoice={this.state.correctChoice} handleClick={this.handleClick}></Options> 
+                                <div>Correct:{this.state.correct}</div>
+                                <div>Incorrect:{this.state.incorrect}</div>                                       
+                            </div>
+
+                        )
+                    }
+              }
+        }
+
+          ReactDOM.render(
+              <MainApp/>,
+              document.getElementById("root")
+          )
+      </script>
+  
+  </body>
+</html>

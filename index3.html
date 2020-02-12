@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+
+  </head>
+  <body>
+      <div id="root"></div>
+      <script type="text/babel">
+         
+         function ChooseOptions(props){
+             return(
+                 <div>
+                    <h1>Choose Option</h1>
+                    <span>New Only <input type="checkbox" /></span><br/><br/>
+                    <span>Select Type
+                        <select>
+                            <option>{props.types1[0]}</option>
+                            <option>{props.types1[1]}</option>
+                            <option>{props.types1[2]}</option>
+                            <option>{props.types1[3]}</option>
+                        </select>
+                    </span>
+                 </div>
+             )
+         }
+         
+         function TransportTableHeader(props){
+            return(
+                    <tr>
+                        <th>{props.tblHeader[0]} </th>
+                        <th>{props.tblHeader[1]} </th>
+                        <th>{props.tblHeader[2]} </th>
+                        <th>{props.tblHeader[3]} </th>
+                    </tr>
+            )
+         }
+         
+         function TransportTableData(props){
+            return(
+                    <tr>
+                        <td>{props.item.Year}</td>
+                        <td>{props.item.Model}</td>
+                        <td>{props.item.Price}</td>
+                        <td><button type="button">Buy Me</button></td>
+                    </tr>
+            )
+         }
+
+         function TransportTable(props){
+            return(
+                <div>
+                    <table>
+                        <TransportTableHeader tblHeader={["Year","Model","Price","Buy"]}/>
+                        <TransportTableData item={props.item}/>
+                    </table>
+                </div>
+            )
+         }
+         function TransportInfo(props){
+             return(
+                 <div>
+                    <h2>{props.heading}</h2>
+                    <TransportTable item={props.items[0]}/>
+                    <TransportTable item={props.items[1]}/>
+                    <TransportTable item={props.items[2]}/>
+                 </div>
+             )
+         }
+
+         function TransportationApp(){
+            return(
+                <div>
+                    <ChooseOptions types1={['All','Cars','Trucks','Convertibles']} />
+                    <TransportInfo heading="Cars" items={[{Year:'2013', Model:'A', Price:'$32000'},{Year:'2013', Model:'A', Price:'$32000'},{Year:'2013', Model:'A', Price:'$32000'}]} />
+                    <TransportInfo heading="Trucks" items={[{Year:'2013', Model:'A', Price:'$32000'},{Year:'2013', Model:'A', Price:'$32000'},{Year:'2013', Model:'A', Price:'$32000'}]} />
+                    <TransportInfo heading="Convertibles" items={[{Year:'2013', Model:'A', Price:'$32000'},{Year:'2013', Model:'A', Price:'$32000'},{Year:'2013', Model:'A', Price:'$32000'}]} />
+
+                </div>
+            )
+         }
+         
+          ReactDOM.render(
+              <TransportationApp/>,
+              document.getElementById("root")
+          )
+      </script>
+  
+  </body>
+</html>
